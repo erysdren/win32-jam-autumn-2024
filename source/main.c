@@ -15,8 +15,6 @@ static SDL_bool mouse_lock = SDL_FALSE;
 void engine_quit(int code)
 {
 	/* save config */
-	config.window_w = screen->w;
-	config.window_h = screen->h;
 	config_save(DEFAULT_CONFIG, &config);
 
 	/* shutdown everything and exit */
@@ -68,8 +66,8 @@ static void handle_inputs(void)
 		}
 		else
 		{
-			config.camera_yaw -= mouse_xrel;
-			config.camera_pitch -= mouse_yrel;
+			config.camera_yaw += mouse_xrel;
+			config.camera_pitch += mouse_yrel;
 
 			config.camera_pitch = clampf(config.camera_pitch, -70, 70);
 			config.camera_yaw = wrapf(config.camera_yaw, 360.0f);
@@ -134,6 +132,8 @@ void engine_frame(Uint32 dt)
 
 			case SDL_VIDEORESIZE:
 				screen = vid_resize(event.resize.w, event.resize.h);
+				config.window_w = screen->w;
+				config.window_h = screen->h;
 				break;
 		}
 	}
