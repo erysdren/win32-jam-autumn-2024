@@ -14,6 +14,7 @@ OBJS=&
 	config.obj&
 	main.obj&
 	maths.obj&
+	vid_gl.obj&
 
 LIBS=&
 	$(SDL_DIR)/SDL.lib&

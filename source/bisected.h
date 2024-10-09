@@ -8,7 +8,11 @@ extern "C" {
 
 #include "SDL_config.h"
 #include "SDL.h"
-#include "SDL_opengl.h"
+
+#ifdef __WIN32__
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif
 
 #include <math.h>
 #include <float.h>
@@ -25,25 +29,20 @@ extern "C" {
 #define PATH_SEP_STR "/"
 #endif
 
+#ifndef UNUSED
+#define UNUSED(x) ((void)(x))
+#endif
+
 /*
  * META
  */
 
-#define TITLE "BiSectEd"
-#define WIDTH (640)
-#define HEIGHT (480)
-#define ASPECT (WIDTH / HEIGHT)
-#define FOV (90)
-#define ZNEAR (0.1f)
-#define ZFAR (1000.0f)
-#define FRAMERATE (60)
-#define TICKRATE (60)
 #define DEFAULT_CONFIG "bisected.ini"
 
-#define GRID_NORTH (-512)
-#define GRID_EAST (512)
-#define GRID_SOUTH (512)
-#define GRID_WEST (-512)
+#define GRID_NORTH (-4096)
+#define GRID_EAST (4096)
+#define GRID_SOUTH (4096)
+#define GRID_WEST (-4096)
 #define GRID_STRIDE (8)
 #define GRID_MIN_STRIDE (8)
 #define GRID_MAX_STRIDE (32)
@@ -70,9 +69,6 @@ float clampf(float value, float min, float max);
 
 void engine_quit(int code);
 void engine_error(const char *fmt, ...);
-void engine_tick(void);
-void engine_render(void);
-void engine_events(void);
 void engine_frame(Uint32 dt);
 void engine_main(void);
 
@@ -90,13 +86,27 @@ typedef struct config {
 	float camera_z;
 	float camera_pitch;
 	float camera_yaw;
+	float camera_fov;
+	float camera_near;
+	float camera_far;
 	int window_w;
 	int window_h;
+	char window_title[64];
+	float target_framerate;
 } config_t;
 
 void config_reset(config_t *config);
 SDL_bool config_load(const char *filename, config_t *config);
 SDL_bool config_save(const char *filename, config_t *config);
+
+/*
+ * VID
+ */
+
+void vid_draw(void);
+SDL_Surface *vid_resize(int w, int h);
+SDL_Surface *vid_init(config_t *cfg);
+void vid_quit(void);
 
 #ifdef __cplusplus
 }

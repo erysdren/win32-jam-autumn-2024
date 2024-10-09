@@ -8,7 +8,7 @@ PKGS=sdl gl glu
 override CFLAGS += $(shell $(PKGCONFIG) $(PKGS) --cflags)
 override LDFLAGS += $(shell $(PKGCONFIG) $(PKGS) --libs) -lm
 
-OBJS = config.o main.o maths.o
+OBJS = config.o main.o maths.o vid_gl.o
 
 all: clean $(TARGET)
 
