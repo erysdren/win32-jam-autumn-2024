@@ -77,10 +77,6 @@ static void draw_3d_view(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	config->camera_x = 128;
-	config->camera_y = 128;
-	config->camera_z = 128;
-
 	camera_look_x = cos(DEG2RAD(config->camera_yaw)) * cos(DEG2RAD(config->camera_pitch));
 	camera_look_y = sin(DEG2RAD(config->camera_yaw)) * cos(DEG2RAD(config->camera_pitch));
 	camera_look_z = sin(DEG2RAD(config->camera_pitch));
