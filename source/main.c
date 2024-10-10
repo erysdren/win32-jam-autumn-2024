@@ -39,6 +39,17 @@ void engine_error(const char *fmt, ...)
 
 static void handle_inputs(void)
 {
+	/* do mouse locking */
+	if (mouse_lock)
+	{
+		SDL_ShowCursor(SDL_FALSE);
+		SDL_WarpMouse(mouse_x, mouse_y);
+	}
+	else
+	{
+		SDL_ShowCursor(SDL_TRUE);
+	}
+
 	/* handle grid zoom */
 	if (mouse_x > screen->w / 2)
 	{
@@ -56,8 +67,6 @@ static void handle_inputs(void)
 	if (mouse_button_state & SDL_BUTTON(SDL_BUTTON_RIGHT))
 	{
 		mouse_lock = SDL_TRUE;
-		SDL_ShowCursor(SDL_FALSE);
-		SDL_WarpMouse(mouse_x, mouse_y);
 
 		if (mouse_x > screen->w / 2)
 		{
@@ -76,7 +85,6 @@ static void handle_inputs(void)
 	else
 	{
 		mouse_lock = SDL_FALSE;
-		SDL_ShowCursor(SDL_TRUE);
 	}
 }
 
