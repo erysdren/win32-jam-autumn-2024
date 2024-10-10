@@ -14,7 +14,7 @@ void config_reset(config_t *config)
 	config->camera_yaw = 0;
 	config->camera_fov = 90.0f;
 	config->camera_near = 0.1f;
-	config->camera_far = 1000.0f;
+	config->camera_far = 10000.0f;
 	config->window_w = 640;
 	config->window_h = 480;
 	SDL_snprintf(config->window_title, sizeof(config->window_title), "BiSectEd");

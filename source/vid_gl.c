@@ -62,15 +62,17 @@ static void draw_2d_view(void)
 
 static void draw_3d_view(void)
 {
-	GLfloat w = (GLfloat)(screen->w / 2) / (GLfloat)screen->h;
-	GLfloat h = (GLfloat)screen->h / (GLfloat)(screen->w / 2);
+	float vfov;
+	float aspect_x = (float)(screen->w / 2) / (float)(screen->h);
+	float aspect_y = (float)(screen->h) / (float)(screen->w / 2);
 
 	glViewport(0, 0, screen->w / 2, screen->h);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	gluPerspective(config->camera_fov * h, w, config->camera_near, config->camera_far);
+	vfov = 2 * atan(tan(DEG2RAD(config->camera_fov) / 2) * aspect_y);
+	gluPerspective(RAD2DEG(vfov), aspect_x, config->camera_near, config->camera_far);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
