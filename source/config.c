@@ -49,13 +49,59 @@ SDL_bool config_load(const char *filename, config_t *config)
 {
 	SDL_RWops *rw;
 	char line[1024];
+	int n = 1;
 
 	rw = SDL_RWFromFile(filename, "rb");
 	if (!rw) return SDL_FALSE;
 
 	while (read_line(rw, line, sizeof(line)))
 	{
-		printf("%s\n", line);
+		char *mid = strchr(line, '=');
+		char *left, *right;
+		if (!mid)
+		{
+			fprintf(stderr, "Warning: line %d of %s is malformed\n", n, filename);
+			continue;
+		}
+
+		left = line;
+		*mid = '\0';
+		right = mid + 1;
+
+		if (SDL_strcmp(left, "last_map") == 0)
+			SDL_strlcpy(config->last_map, right, sizeof(config->last_map));
+		else if (SDL_strcmp(left, "grid_scale") == 0)
+			config->grid_scale = SDL_atof(right);
+		else if (SDL_strcmp(left, "grid_offset_x") == 0)
+			config->grid_offset_x = SDL_atof(right);
+		else if (SDL_strcmp(left, "grid_offset_y") == 0)
+			config->grid_offset_y = SDL_atof(right);
+		else if (SDL_strcmp(left, "camera_x") == 0)
+			config->camera_x = SDL_atof(right);
+		else if (SDL_strcmp(left, "camera_y") == 0)
+			config->camera_y = SDL_atof(right);
+		else if (SDL_strcmp(left, "camera_z") == 0)
+			config->camera_z = SDL_atof(right);
+		else if (SDL_strcmp(left, "camera_pitch") == 0)
+			config->camera_pitch = SDL_atof(right);
+		else if (SDL_strcmp(left, "camera_yaw") == 0)
+			config->camera_yaw = SDL_atof(right);
+		else if (SDL_strcmp(left, "camera_fov") == 0)
+			config->camera_fov = SDL_atof(right);
+		else if (SDL_strcmp(left, "camera_near") == 0)
+			config->camera_near = SDL_atof(right);
+		else if (SDL_strcmp(left, "camera_far") == 0)
+			config->camera_far = SDL_atof(right);
+		else if (SDL_strcmp(left, "window_title") == 0)
+			SDL_strlcpy(config->window_title, right, sizeof(config->window_title));
+		else if (SDL_strcmp(left, "window_w") == 0)
+			config->window_w = SDL_atoi(right);
+		else if (SDL_strcmp(left, "window_h") == 0)
+			config->window_h = SDL_atoi(right);
+		else if (SDL_strcmp(left, "target_framerate") == 0)
+			config->target_framerate = SDL_atof(right);
+
+		n++;
 	}
 
 	/* clean up */
