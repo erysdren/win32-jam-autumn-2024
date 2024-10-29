@@ -94,6 +94,9 @@ void engine_frame(Uint32 dt)
 	SDL_Event event;
 	SDL_bool do_draw = SDL_FALSE;
 
+	/* reset at the start of each frame */
+	mouse_xrel = mouse_yrel = 0;
+
 	/* handle sdl events */
 	keys = SDL_GetKeyState(NULL);
 	while (SDL_PollEvent(&event))
